@@ -8,6 +8,7 @@ var async = require('async');
 exports.index = function(req, res) {
     async.parallel({
         book_count: function(callback) {
+            Book.countDocuments({}, callback);
         },
         book_instance_count: function(callback) {
             BookInstance.countDocuments({}, callback);
