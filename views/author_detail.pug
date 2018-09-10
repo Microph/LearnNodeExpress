@@ -4,6 +4,9 @@ block content
 
   h1 Author: #{author.name}
   p #{author.date_of_birth_formatted} - #{author.date_of_death_formatted}
+
+  if(author.lifespan)
+    p (#{author.lifespan} years)
   
   div(style='margin-left:20px;margin-top:20px')
 
