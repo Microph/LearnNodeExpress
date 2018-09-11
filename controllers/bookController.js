@@ -215,7 +215,7 @@ exports.book_delete_post = function(req, res) {
             return next(err);
         }
         
-        if(results.book_instance.length > 0){
+        if(results.book_instance.length){
             res.render('book_delete', { title: 'Delete Book', book:  results.book, book_instances: results.book_instance } );
         }
         else{
