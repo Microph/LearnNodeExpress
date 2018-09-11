@@ -168,11 +168,14 @@ exports.author_update_post = [
     // Validate fields.
     body('first_name', 'First Name must not be empty.').isLength({ min: 1 }).trim(),
     body('family_name', 'Family Name must not be empty.').isLength({ min: 1 }).trim(),
+    body('date_of_birth', 'Invalid Date of Birth').optional({ checkFalsy: true }).isISO8601(),
+    body('date_of_death', 'Invalid Date of Death').optional({ checkFalsy: true }).isISO8601(),
 
     // Sanitize fields.
     sanitizeBody('first_name').trim().escape(),
     sanitizeBody('family_name').trim().escape(),
-    sanitizeBody('date_of_birth').trim().escape(),
+    sanitizeBody('date_of_birth').toDate(),
+    sanitizeBody('date_of_death').toDate(),
 
     // Process request after validation and sanitization.
     (req, res, next) => {
@@ -184,7 +187,8 @@ exports.author_update_post = [
         var author = new Author(
           { first_name: req.body.first_name,
             family_name: req.body.family_name,
-            date_of_birth: req.body.date_of_birth ? req.body.date_of_birth : '',
+            date_of_birth: req.body.date_of_birth,
+            date_of_death: req.body.date_of_death,
             _id:req.params.id //This is required, or a new ID will be assigned!
            });
 
