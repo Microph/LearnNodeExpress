@@ -3,7 +3,7 @@ extends layout
 block content
 
   h1 Author: #{author.name}
-  p #{author.date_of_birth_formatted} - #{author.date_of_death_formatted}
+  p #{author.date_of_birth_formatted ? author.date_of_birth_formatted : 'Unknown'}  - #{author.date_of_death_formatted ? author.date_of_death_formatted : 'Unknown'}
 
   if(author.lifespan)
     p (#{author.lifespan} years)
