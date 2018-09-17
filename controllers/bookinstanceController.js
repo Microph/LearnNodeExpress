@@ -182,14 +182,27 @@ exports.bookinstance_update_post = [
            });
 
         if (!errors.isEmpty()) {
-            // There are errors. Render form again with sanitized values and error messages.
-            Book.find({},'title')
-                .exec(function (err, books) {
-                    if (err) { return next(err); }
-                    // Successful, so render.
-                    res.render('bookinstance_form', { title: 'Create BookInstance', book_list : books, selected_book : bookinstance.book._id , errors: errors.array(), bookinstance:bookinstance });
+            async.parallel({
+                bookinstance: function(callback) {
+                    BookInstance.findById(req.params.id)
+                    .populate('book')
+                    .exec(callback)
+                },
+        
+                books: function(callback) {
+                  Book.find({}, 'title')
+                  .exec(callback)
+                },
+            }, function(err, results) {
+                if (err) { return next(err); } // Error in API usage.
+                if (results.bookinstance==null) { // No results.
+                    var err = new Error('Book Instance not found');
+                    err.status = 404;
+                    return next(err);
+                }
+                
+                res.render('bookinstance_form', { title: 'Update Book Instance ID: ' + req.params.id, bookinstance:  results.bookinstance, book_list: results.books, errors: errors.array()});
             });
-            return;
         }
         else {
             // Data from form is valid. Update the record.
