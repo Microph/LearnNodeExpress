@@ -203,6 +203,7 @@ exports.bookinstance_update_post = [
                 
                 res.render('bookinstance_form', { title: 'Update Book Instance ID: ' + req.params.id, bookinstance:  results.bookinstance, book_list: results.books, errors: errors.array()});
             });
+            return;
         }
         else {
             // Data from form is valid. Update the record.
